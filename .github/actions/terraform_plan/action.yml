@@ -23,14 +23,14 @@ runs:
       shell: bash
       run: |  
         echo "Git Hash is $(git rev-parse --short HEAD)"
-        PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}"
+        PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}_${{ github.run_attempt }}"
         echo $PLAN
-        echo $PLAN >> ${{github.run_id}}_${{ env.ENV }}.plan
+        echo $PLAN >> ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
     - name: Upload plan for ${{ env.ENV }}
       uses: actions/upload-artifact@v4
       env:
         ENV: ${{ inputs.ENV }}
       with:
-        name: ${{github.run_id}}_${{ env.ENV }}.plan
-        path: ${{github.run_id}}_${{ env.ENV }}.plan
+        name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+        path: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
         retention-days: 1

@@ -22,11 +22,11 @@ runs:
       env:
         ENV: ${{ inputs.ENV }}
       with:
-        name: ${{github.run_id}}_${{ env.ENV }}.plan
+        name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
     - name: Deploy to ${{ env.ENV }}
       env:
         ENV: ${{ inputs.ENV }}
       shell: bash
       run: |
         echo "Deploying $ARTEFACT_NAME to $ENV"
-        cat ${{github.run_id}}_${{ env.ENV }}.plan
+        cat ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
