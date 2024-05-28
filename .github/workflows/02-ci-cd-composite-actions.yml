@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/terraform_plan/
+      - uses: ./.github/actions/terraform_plan
         with:
           ENV: Dev
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -37,7 +37,7 @@ jobs:
       name: Dev
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/terraform_deploy/
+      - uses: ./.github/actions/terraform_deploy
         with:
           ENV: Dev
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/terraform_plan/
+      - uses: ./.github/actions/terraform_plan
         with:
           ENV: UAT
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -59,7 +59,7 @@ jobs:
       name: UAT
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/terraform_deploy/
+      - uses: ./.github/actions/terraform_deploy
         with:
           ENV: UAT
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
