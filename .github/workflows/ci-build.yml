@@ -18,6 +18,7 @@ jobs:
 
 
   deploy-dev:
+    depends-on: build
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
