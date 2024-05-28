@@ -1,0 +1,10 @@
+name: ci-build
+run-name: CI-Build ${{ github.sha }}
+on: [push]
+jobs: 
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ls
+        run: ls -la
