@@ -1,0 +1,32 @@
+name: 'terraform deploy'
+description: 'TF deploy'
+inputs:
+  ENV:  # environment
+    description: 'environment'
+    required: true
+    default: 'Dev'
+  ARTEFACT_NAME:  # ARTEFACT_NAME
+    description: 'ARTEFACT_NAME'
+    required: true
+    default: ''
+# outputs:
+#   deploy:
+#     description: "deploy"
+#     value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Download plan for ${{ env.ENV }}
+      uses: actions/download-artifact@v4
+      env:
+        ENV: ${{ inputs.ENV }}
+      with:
+        name: ${{github.run_id}}_${{ env.ENV }}.plan
+    - name: Deploy to ${{ env.ENV }}
+      env:
+        ENV: ${{ inputs.ENV }}
+      shell: bash
+      run: |
+        echo "Deploying $ARTEFACT_NAME to $ENV"
+        cat ${{github.run_id}}_${{ env.ENV }}.plan

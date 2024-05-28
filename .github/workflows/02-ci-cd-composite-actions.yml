@@ -34,21 +34,13 @@ jobs:
   deploy-dev:
     needs: [plan-dev, build]
     runs-on: ubuntu-latest
-    env:
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      ENV: Dev
     environment: 
       name: Dev
     steps:
-      - uses: actions/checkout@v4
-      - name: Download plan for ${{ env.ENV }}
-        uses: actions/download-artifact@v4
+      - uses: ./.github/actions/terraform_plan
         with:
-          name: ${{github.run_id}}_${{ env.ENV }}.plan
-      - name: Deploy to ${{ env.ENV }}
-        run: |
-          echo "Deploying $ARTEFACT_NAME to $ENV"
-          cat ${{github.run_id}}_${{ env.ENV }}.plan
+          ENV: Dev
+          ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
 
 
   plan-uat:
