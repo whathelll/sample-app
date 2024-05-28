@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: Dev
     environment: 
       name: Dev
     steps:
@@ -50,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      ENV: uat
+      ENV: UAT
     steps:
       - uses: actions/checkout@v4
       - name: Planning to ${{ env.ENV }}
@@ -62,6 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: UAT
     environment: 
       name: UAT
     steps:
