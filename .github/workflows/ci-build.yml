@@ -21,12 +21,11 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     env:
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ARTEFACT_NAME: ${{ steps.build.outputs.artefact-name }}
     environment: 
       name: Dev
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Dev
         run: |  
-          echo "Deploying to Dev"
           echo "Deploying $ARTEFACT_NAME to Dev"
