@@ -38,6 +38,7 @@ jobs:
         with:
           name: ${{github.run_id}}_${{ env.ENV }}.plan
           path: ${{github.run_id}}_${{ env.ENV }}.plan
+          retention-days: 1
 
 
   deploy-dev:
