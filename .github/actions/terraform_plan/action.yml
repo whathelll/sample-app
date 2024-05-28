@@ -20,6 +20,7 @@ runs:
     - name: Planning to ${{ env.ENV }}
       env:
         ENV: ${{ inputs.ENV }}
+      shell: bash
       run: |  
         PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}"
         echo $PLAN
@@ -28,6 +29,7 @@ runs:
       uses: actions/upload-artifact@v4
       env:
         ENV: ${{ inputs.ENV }}
+      shell: bash
       with:
         name: ${{github.run_id}}_${{ env.ENV }}.plan
         path: ${{github.run_id}}_${{ env.ENV }}.plan
