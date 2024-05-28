@@ -36,7 +36,7 @@ jobs:
     environment: 
       name: Dev
     steps:
-      - uses: ./.github/actions/terraform_plan
+      - uses: ./.github/actions/terraform_deploy
         with:
           ENV: Dev
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -58,7 +58,7 @@ jobs:
     environment: 
       name: Dev
     steps:
-      - uses: ./.github/actions/terraform_plan
+      - uses: ./.github/actions/terraform_deploy
         with:
           ENV: Dev
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
