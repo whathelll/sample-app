@@ -56,10 +56,10 @@ jobs:
     needs: [plan-uat, build]
     runs-on: ubuntu-latest
     environment: 
-      name: Dev
+      name: UAT
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/terraform_deploy/
         with:
-          ENV: Dev
+          ENV: UAT
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
