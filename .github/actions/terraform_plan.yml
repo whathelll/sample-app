@@ -1,0 +1,34 @@
+name: 'terraform plan'
+description: 'TF Plan'
+inputs:
+  ENV:  # environment
+    description: 'environment'
+    required: true
+    default: 'Dev'
+  ARTEFACT_NAME:  # ARTEFACT_NAME
+    description: 'ARTEFACT_NAME'
+    required: true
+    default: ''
+# outputs:
+#   plan:
+#     description: "plan"
+#     value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Planning to ${{ env.ENV }}
+      env:
+        ENV: ${{ inputs.ENV }}
+      run: |  
+        PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}"
+        echo $PLAN
+        echo $PLAN >> ${{github.run_id}}_${{ env.ENV }}.plan
+    - name: Upload plan for ${{ env.ENV }}
+      uses: actions/upload-artifact@v4
+      env:
+        ENV: ${{ inputs.ENV }}
+      with:
+        name: ${{github.run_id}}_${{ env.ENV }}.plan
+        path: ${{github.run_id}}_${{ env.ENV }}.plan
+        retention-days: 1

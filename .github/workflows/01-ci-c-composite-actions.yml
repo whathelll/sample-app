@@ -1,0 +1,91 @@
+name: 01-ci-build
+run-name: ${{ github.workflow}} - ${{ github.sha }}
+on: [push, workflow_dispatch]
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artefact-name: ${{ steps.build.outputs.ARTEFACT_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: ls
+        run: ls -la
+      - name: Build Artefact
+        id: build
+        run: |
+          ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_ENV
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
+      - name: check env var
+        run: echo $ARTEFACT_NAME
+
+
+  plan-dev:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ../actions/terraform_plan
+        with:
+          ENV: Dev
+          ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+
+
+  deploy-dev:
+    needs: [plan-dev, build]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: Dev
+    environment: 
+      name: Dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download plan for ${{ env.ENV }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{github.run_id}}_${{ env.ENV }}.plan
+      - name: Deploy to ${{ env.ENV }}
+        run: |
+          echo "Deploying $ARTEFACT_NAME to $ENV"
+          cat ${{github.run_id}}_${{ env.ENV }}.plan
+
+
+  plan-uat:
+    needs: [deploy-dev, build]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: UAT
+    steps:
+      - uses: actions/checkout@v4
+      - name: Planning to ${{ env.ENV }}
+        run: |  
+          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}"
+          echo $PLAN
+          echo $PLAN >> ${{github.run_id}}_${{ env.ENV }}.plan
+      - name: Upload plan for ${{ env.ENV }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{github.run_id}}_${{ env.ENV }}.plan
+          path: ${{github.run_id}}_${{ env.ENV }}.plan
+          retention-days: 1
+
+  deploy-uat:
+    needs: [plan-uat, build]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: UAT
+    environment: 
+      name: UAT
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download plan for ${{ env.ENV }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{github.run_id}}_${{ env.ENV }}.plan
+      - name: Deploy to ${{ env.ENV }}
+        run: |
+          echo "Deploying $ARTEFACT_NAME to $ENV"
+          cat ${{github.run_id}}_${{ env.ENV }}.plan
