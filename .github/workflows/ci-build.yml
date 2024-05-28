@@ -46,7 +46,7 @@ jobs:
 
 
   plan-uat:
-    needs: [build]
+    needs: [deploy-dev]
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
