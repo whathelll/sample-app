@@ -25,9 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      #uses syntax: {owner}/{repo}/.github/workflows/{filename}@{ref}
-
-      - uses: ./.github/actions/terraform_plan 
+      - uses: ./.github/actions/terraform_plan
         with:
           ENV: Dev
           ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
