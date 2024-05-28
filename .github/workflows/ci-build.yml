@@ -19,8 +19,20 @@ jobs:
         run: echo $ARTEFACT_NAME
 
 
-  deploy-dev:
+  plan-dev:
     needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Planning to ${{ env.ENV }}
+        run: |  
+          echo "Planning $ARTEFACT_NAME to $ENV"
+
+  deploy-dev:
+    needs: [plan-dev]
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -28,6 +40,32 @@ jobs:
       name: Dev
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to Dev
+      - name: Deploy to ${{ env.ENV }}
         run: |  
-          echo "Deploying $ARTEFACT_NAME to Dev"
+          echo "Deploying $ARTEFACT_NAME to $ENV"
+
+
+  plan-uat:
+    needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ENV: uat
+    steps:
+      - uses: actions/checkout@v4
+      - name: Planning to ${{ env.ENV }}
+        run: |  
+          echo "Planning $ARTEFACT_NAME to $ENV"
+
+  deploy-uat:
+    needs: [plan-uat]
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    environment: 
+      name: UAT
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to ${{ env.ENV }}
+        run: |  
+          echo "Deploying $ARTEFACT_NAME to $ENV"
