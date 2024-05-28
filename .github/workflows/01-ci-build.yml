@@ -1,4 +1,4 @@
-name: ci-build
+name: 01-ci-build
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: [push, workflow_dispatch]
 jobs: 
@@ -13,8 +13,9 @@ jobs:
       - name: Build Artefact
         id: build
         run: |
-          echo "ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_ENV
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
       - name: check env var
         run: echo $ARTEFACT_NAME
 
@@ -29,7 +30,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Planning to ${{ env.ENV }}
         run: |  
-          echo "Planning $ARTEFACT_NAME to $ENV"
+          PLAN = "Planning $ARTEFACT_NAME to $ENV with RunID: ${{github.run_id}}"
+          echo $PLAN
+          echo $PLAN >> ${{github.run_id}}_$ENV.plan
+      - name: Upload plan for ${{ env.ENV }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{github.run_id}}_$ENV.plan
+          path: ${{github.run_id}}_$ENV.plan
+
 
   deploy-dev:
     needs: [plan-dev, build]
@@ -44,6 +53,10 @@ jobs:
       - name: Deploy to ${{ env.ENV }}
         run: |  
           echo "Deploying $ARTEFACT_NAME to $ENV"
+      - name: Download plan for ${{ env.ENV }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{github.run_id}}_$ENV.plan
 
 
   plan-uat:
