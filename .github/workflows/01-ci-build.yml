@@ -47,7 +47,7 @@ jobs:
 
 
   plan-uat:
-    needs: [deploy-dev]
+    needs: [deploy-dev, build]
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -59,7 +59,7 @@ jobs:
           echo "Planning $ARTEFACT_NAME to $ENV"
 
   deploy-uat:
-    needs: [plan-uat]
+    needs: [plan-uat, build]
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
