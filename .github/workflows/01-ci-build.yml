@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      ENV: dev
+      ENV: Dev
     steps:
       - uses: actions/checkout@v4
       - name: Planning to ${{ env.ENV }}
