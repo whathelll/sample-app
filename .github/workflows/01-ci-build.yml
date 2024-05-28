@@ -30,14 +30,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Planning to ${{ env.ENV }}
         run: |  
-          PLAN = "Planning $ARTEFACT_NAME to $ENV with RunID: ${{github.run_id}}"
+          PLAN="Planning $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}"
           echo $PLAN
-          echo $PLAN >> ${{github.run_id}}_$ENV.plan
+          echo $PLAN >> ${{github.run_id}}_${{ env.ENV }}.plan
       - name: Upload plan for ${{ env.ENV }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{github.run_id}}_$ENV.plan
-          path: ${{github.run_id}}_$ENV.plan
+          name: ${{github.run_id}}_${{ env.ENV }}.plan
+          path: ${{github.run_id}}_${{ env.ENV }}.plan
 
 
   deploy-dev:
@@ -57,6 +57,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{github.run_id}}_$ENV.plan
+      - name: Deploy Plan
+        run: cat ${{github.run_id}}_$ENV.plan
 
 
   plan-uat:
