@@ -1,6 +1,6 @@
 name: ci-build
 run-name: ${{ github.workflow}} - ${{ github.sha }}
-on: [push]
+on: [push, workflow_dispatch]
 jobs: 
   build:
     runs-on: ubuntu-latest
