@@ -2,14 +2,30 @@ name: ci-build
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: [push]
 jobs: 
-  diff:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: ls
         run: ls -la
       - name: Build Artefact
-        run: echo "ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        id: build
+        run: |
+          echo "ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: check env var
         run: echo $ARTEFACT_NAME
-        
+
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    env:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    environment: 
+      name: Dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Dev
+        run: |  
+          echo "Deploying to Dev"
+          echo "Deploying $ARTEFACT_NAME to Dev"
