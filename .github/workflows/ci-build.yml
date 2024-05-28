@@ -4,6 +4,8 @@ on: [push]
 jobs: 
   build:
     runs-on: ubuntu-latest
+    outputs:
+      artefact-name: ${{ steps.build.outputs.ARTEFACT_NAME }}
     steps:
       - uses: actions/checkout@v4
       - name: ls
@@ -21,7 +23,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     env:
-      ARTEFACT_NAME: ${{ steps.build.outputs.artefact-name }}
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
     environment: 
       name: Dev
     steps:
