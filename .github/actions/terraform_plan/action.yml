@@ -29,7 +29,6 @@ runs:
       uses: actions/upload-artifact@v4
       env:
         ENV: ${{ inputs.ENV }}
-      shell: bash
       with:
         name: ${{github.run_id}}_${{ env.ENV }}.plan
         path: ${{github.run_id}}_${{ env.ENV }}.plan
