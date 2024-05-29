@@ -11,7 +11,6 @@ on:
         required: true
         type: string
         default: ''
-    secrets: inherit
 
 jobs:
   plan:
@@ -19,6 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: python print inherited secret
+        env:
+          MY_VAL: ${{ secrets.TEST_SECRET }}
+        run: |
+          import os
+          for q in (os.getenv("MY_VAL")):
+            print(q)
+        shell: python
       - name: Terraform Planning for ${{ env.ENV }}
         env:
           ENV: ${{ inputs.ENV }}
