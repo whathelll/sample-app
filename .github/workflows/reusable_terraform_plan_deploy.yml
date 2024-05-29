@@ -4,13 +4,15 @@ on:
       ENV:  # environment
         description: 'environment'
         required: true
+        type: string
         default: 'Dev'
       ARTEFACT_NAME:  # ARTEFACT_NAME
         description: 'ARTEFACT_NAME'
         required: true
+        type: string
         default: ''
     secrets: inherit
-    
+
 jobs:
   plan:
     name: Plan ${{ inputs.ENV }}
