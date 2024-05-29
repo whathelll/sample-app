@@ -40,8 +40,8 @@ jobs:
           path: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
           retention-days: 1
 
-  deploy:
-    name: Deploy
+  apply:
+    name: Apply
     runs-on: ubuntu-latest
     needs: [plan]
     environment: 

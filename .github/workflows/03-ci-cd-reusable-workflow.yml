@@ -21,6 +21,7 @@ jobs:
         run: echo $ARTEFACT_NAME
 
   deploy-dev:
+    name: Deploy to Dev
     needs: [build]
     uses: whathelll/sample-app/.github/workflows/reusable_terraform_plan_deploy.yml@main
     with:
@@ -29,6 +30,7 @@ jobs:
     secrets: inherit
 
   deploy-uat:
+    name: Deploy to UAT
     needs: [build, deploy-dev]
     uses: whathelll/sample-app/.github/workflows/reusable_terraform_plan_deploy.yml@main
     with:
