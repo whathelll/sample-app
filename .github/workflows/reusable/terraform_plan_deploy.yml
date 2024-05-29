@@ -1,0 +1,51 @@
+on:
+  workflow_call:
+    inputs:
+      ENV:  # environment
+        description: 'environment'
+        required: true
+        default: 'Dev'
+      ARTEFACT_NAME:  # ARTEFACT_NAME
+        description: 'ARTEFACT_NAME'
+        required: true
+        default: ''
+    secrets: inherit
+    
+jobs:
+  plan:
+    name: Plan ${{ inputs.ENV }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Terraform Planning for ${{ env.ENV }}
+        env:
+          ENV: ${{ inputs.ENV }}
+        shell: bash
+        run: |  
+          echo "Git Hash is $(git rev-parse --short HEAD)"
+          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}_${{ github.run_attempt }}"
+          echo $PLAN
+          echo $PLAN >> ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+      - name: Upload plan for ${{ env.ENV }}
+        uses: actions/upload-artifact@v4
+        env:
+          ENV: ${{ inputs.ENV }}
+        with:
+          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+          path: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+          retention-days: 1
+
+  deploy:
+    name: Deploy ${{ inputs.ENV }}
+    runs-on: ubuntu-latest
+    needs: plan
+    steps:
+      # - uses: actions/checkout@v4
+      - name: Download plan for ${{ env.ENV }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+      - name: Deploy to ${{ env.ENV }}
+        run: |
+          echo "Deploying $ARTEFACT_NAME to $ENV"
+          cat ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
