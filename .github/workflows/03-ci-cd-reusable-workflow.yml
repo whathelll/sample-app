@@ -22,14 +22,14 @@ jobs:
 
   deploy-dev:
     needs: [build]
-    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml
+    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml@main
     with:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
 
   deploy-uat:
     needs: [build, deploy-dev]
-    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml
+    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml@main
     with:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
