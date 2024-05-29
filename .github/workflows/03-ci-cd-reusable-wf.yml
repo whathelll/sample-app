@@ -1,4 +1,4 @@
-name: 03-ci-cd-reusable-workflow
+name: 03-ci-cd-reusable-wf
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: [push, workflow_dispatch]
 
