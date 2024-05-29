@@ -1,6 +1,7 @@
 name: 02-ci-cd-composite-actions
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: [workflow_dispatch]
+
 jobs: 
   build:
     runs-on: ubuntu-latest

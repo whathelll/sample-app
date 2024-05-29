@@ -1,0 +1,35 @@
+name: 03-ci-cd-reusable-workflow
+run-name: ${{ github.workflow}} - ${{ github.sha }}
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artefact-name: ${{ steps.build.outputs.ARTEFACT_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: ls
+        run: ls -la
+      - name: Build Artefact
+        id: build
+        run: |
+          ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_ENV
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
+      - name: check env var
+        run: echo $ARTEFACT_NAME
+
+  deploy-dev:
+    needs: [build]
+    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml
+    with:
+      ENV: Dev
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+
+  deploy-uat:
+    needs: [build, deploy-dev]
+    uses: whathelll/sample-app/.github/workflows/reusable/wf_terraform_plan_deploy.yml
+    with:
+      ENV: UAT
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
