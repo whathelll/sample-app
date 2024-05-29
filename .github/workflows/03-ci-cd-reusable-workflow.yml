@@ -26,6 +26,7 @@ jobs:
     with:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    secrets: inherit
 
   deploy-uat:
     needs: [build, deploy-dev]
@@ -33,3 +34,4 @@ jobs:
     with:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    secrets: inherit

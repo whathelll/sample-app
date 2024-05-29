@@ -14,7 +14,7 @@ on:
 
 jobs:
   plan:
-    name: Plan ${{ inputs.ENV }}
+    name: Plan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,35 +26,31 @@ jobs:
           for q in (os.getenv("MY_VAL")):
             print(q)
         shell: python
-      - name: Terraform Planning for ${{ env.ENV }}
-        env:
-          ENV: ${{ inputs.ENV }}
+      - name: Terraform Planning for ${{ inputs.ENV }}
         shell: bash
         run: |  
           echo "Git Hash is $(git rev-parse --short HEAD)"
-          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ env.ENV }} with RunID: ${{github.run_id}}_${{ github.run_attempt }}"
+          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ inputs.ENV }} with RunID: ${{github.run_id}}_${{ github.run_attempt }}"
           echo $PLAN
-          echo $PLAN >> ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
-      - name: Upload plan for ${{ env.ENV }}
+          echo $PLAN >> ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+      - name: Upload plan for ${{ inputs.ENV }}
         uses: actions/upload-artifact@v4
-        env:
-          ENV: ${{ inputs.ENV }}
         with:
-          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
-          path: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          path: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
           retention-days: 1
 
   deploy:
-    name: Deploy ${{ inputs.ENV }}
+    name: Deploy
     runs-on: ubuntu-latest
     needs: plan
     steps:
       # - uses: actions/checkout@v4
-      - name: Download plan for ${{ env.ENV }}
+      - name: Download plan for ${{ inputs.ENV }}
         uses: actions/download-artifact@v4
         with:
-          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
-      - name: Deploy to ${{ env.ENV }}
+          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+      - name: Deploy to ${{ inputs.ENV }}
         run: |
           echo "Deploying $ARTEFACT_NAME to $ENV"
-          cat ${{github.run_id}}_${{ github.run_attempt }}_${{ env.ENV }}.plan
+          cat ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
