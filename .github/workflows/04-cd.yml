@@ -35,6 +35,7 @@ jobs:
 
   deploy-dev:
     name: Deploy to Dev
+    needs: [start-point]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: Dev
