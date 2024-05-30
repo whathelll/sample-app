@@ -29,7 +29,9 @@ on:
 jobs:
   do-nothing:
     runs-on: ubuntu-latest
-    
+    steps:
+      - name: Do Nothing
+        run: echo "Doing Nothing"
 
   deploy-dev:
     name: Deploy to Dev
