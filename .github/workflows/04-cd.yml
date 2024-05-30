@@ -27,8 +27,9 @@ on:
         type: string
 
 jobs:
+  # Needs this otherwise Error: The workflow must contain at least one job with no dependencies.
   start:
-    name: Start: does nothing
+    name: Start
     runs-on: ubuntu-latest
     steps:
       - name: Do Nothing
