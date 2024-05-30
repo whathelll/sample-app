@@ -71,5 +71,5 @@ jobs:
           name: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
       - name: Deploy to ${{ inputs.ENV }}
         run: |
-          echo "Deploying ${{ inputs.ARTEFACT_NAME }} to $ENV"
+          echo "Deploying ${{ inputs.ARTEFACT_NAME }} to ${{ inputs.ENV }}"
           cat ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
