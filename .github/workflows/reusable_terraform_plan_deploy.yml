@@ -61,7 +61,7 @@ jobs:
       matrix:
         region: ${{ fromJson(inputs.REGIONS) }}
     environment: 
-      name: ${{ inputs.ENV }}
+      name: ${{ inputs.ENV }}_${{ matrix.region }}
     steps:
       # - uses: actions/checkout@v4
       - name: Download plan for ${{ inputs.ENV }}

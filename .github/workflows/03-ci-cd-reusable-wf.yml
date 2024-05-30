@@ -7,7 +7,7 @@ on:
       REGIONS:
         description: 'Regions'
         required: true
-        default: '["au"]'
+        default: '["au", "us", "ca"]'
 
 jobs:
   build:
