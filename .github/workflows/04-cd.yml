@@ -27,7 +27,7 @@ on:
         type: string
 
 jobs:
-  restart-point:
+  start-point:
     runs-on: ubuntu-latest
     steps:
       - name: Do Nothing
