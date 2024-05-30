@@ -27,6 +27,10 @@ on:
         type: string
 
 jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    
+
   deploy-dev:
     name: Deploy to Dev
     needs: [build]
