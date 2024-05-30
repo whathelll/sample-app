@@ -35,7 +35,7 @@ jobs:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
       # REGIONS: '["au"]'
-      REGIONS: ${{ github.event_name == "workflow_dispatch" ? github.inputs.REGIONS : null }} 
+      REGIONS: ${{ github.event_name == "workflow_dispatch" && github.inputs.REGIONS || '["au"]' }} 
     secrets: inherit
 
   deploy-uat:
@@ -45,5 +45,6 @@ jobs:
     with:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      REGIONS: '["au", "us"]'
+      # REGIONS: '["au", "us"]'
+      REGIONS: ${{ github.event_name == "workflow_dispatch" && github.inputs.REGIONS || '["au", "us"]' }} 
     secrets: inherit
