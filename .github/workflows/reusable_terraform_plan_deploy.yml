@@ -41,11 +41,10 @@ jobs:
           PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ inputs.ENV }} with RunID: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}"
           echo $PLAN
           echo $PLAN >> ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
-          # if matrix.region == 'us' exit 1
-          if [ "${{ matrix.region }}" == "us" ]; then
-            echo "Exiting with error"
-            exit 1
-          fi
+          # if [ "${{ matrix.region }}" == "us" ]; then
+          #   echo "Exiting with error as a test due to region == us"
+          #   exit 1
+          # fi
 
       - name: Upload plan for ${{ inputs.ENV }}
         uses: actions/upload-artifact@v4
