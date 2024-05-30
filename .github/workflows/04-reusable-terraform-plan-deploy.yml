@@ -24,9 +24,9 @@ jobs:
     steps:
       - name: Do Nothing
         run: echo "Doing Nothing"
-        
+
   plan:
-    name: Plan ${{ inputs.ENV }}
+    name: Plan ${{ inputs.ENV }} ${{ matrix.region }}
     needs: [restart-point]
     runs-on: ubuntu-latest
     strategy:
@@ -62,7 +62,7 @@ jobs:
           retention-days: 1
 
   apply:
-    name: Apply ${{ inputs.ENV }}
+    name: Apply ${{ inputs.ENV }} ${{ matrix.region }}
     runs-on: ubuntu-latest
     needs: [plan]
     strategy:
