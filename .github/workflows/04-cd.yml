@@ -1,32 +1,27 @@
-name: 03-ci-cd-reusable-wf
+name: 04-cd
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: 
-  # push:
+  push:
   workflow_dispatch:
     inputs:
       REGIONS:
         description: 'Regions'
         required: true
         default: '["au", "us", "ca"]'
+      ARTEFACT_NAME:
+        description: 'Artefact Name'
+        required: true
+        type: string
+
+  workflow_call:
+    inputs:
+      ENV:  # environment
+        description: 'environment'
+        required: true
+        type: string
+        default: 'Dev'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    outputs:
-      artefact-name: ${{ steps.build.outputs.ARTEFACT_NAME }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: ls
-        run: ls -la
-      - name: Build Artefact
-        id: build
-        run: |
-          ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)
-          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_ENV
-          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
-      - name: check env var
-        run: echo $ARTEFACT_NAME
-
   deploy-dev:
     name: Deploy to Dev
     needs: [build]
