@@ -20,7 +20,7 @@ on:
 
 jobs:
   plan:
-    name: Plan
+    name: Plan ${{ inputs.ENV }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -55,7 +55,7 @@ jobs:
           retention-days: 1
 
   apply:
-    name: Apply
+    name: Apply ${{ inputs.ENV }}
     runs-on: ubuntu-latest
     needs: [plan]
     strategy:

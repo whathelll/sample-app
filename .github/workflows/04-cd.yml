@@ -27,7 +27,8 @@ on:
         type: string
 
 jobs:
-  start-point:
+  start:
+    name: Start: does nothing
     runs-on: ubuntu-latest
     steps:
       - name: Do Nothing
@@ -35,7 +36,7 @@ jobs:
 
   deploy-dev:
     name: Deploy Dev
-    needs: [start-point]
+    needs: [start]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: Dev
