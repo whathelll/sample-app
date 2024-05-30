@@ -34,7 +34,7 @@ jobs:
         run: echo "Doing Nothing"
 
   deploy-dev:
-    name: Deploy to Dev
+    name: Deploy Dev
     needs: [start-point]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
@@ -45,7 +45,7 @@ jobs:
     secrets: inherit
 
   deploy-uat:
-    name: Deploy to UAT
+    name: Deploy UAT
     needs: [deploy-dev]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:

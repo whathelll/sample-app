@@ -23,7 +23,7 @@ jobs:
         run: echo $ARTEFACT_NAME
 
   cd:
-    name: Deploy to Dev
+    name: Deploy
     needs: [build]
     uses: ./.github/workflows/04-cd.yml
     with:
