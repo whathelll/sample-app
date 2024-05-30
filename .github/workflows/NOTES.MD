@@ -6,9 +6,9 @@
 - nice single pipeline build -> deploy view
 - 
 #### Cons
-- can't deploy infra without a rebuild
+- can't deploy updates to infra without a rebuild
 - can manually trigger deploy to specific environments
-
+- can't rerun a called workflow, have to rerun jobs within the called workflow. When using matrix with dependencies between plan and apply, re-running deploy for a job
 
 
 

@@ -30,7 +30,7 @@ jobs:
   deploy-dev:
     name: Deploy to Dev
     needs: [build]
-    uses: whathelll/sample-app/.github/workflows/reusable_terraform_plan_deploy.yml@main
+    uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
@@ -41,7 +41,7 @@ jobs:
   deploy-uat:
     name: Deploy to UAT
     needs: [build, deploy-dev]
-    uses: whathelll/sample-app/.github/workflows/reusable_terraform_plan_deploy.yml@main
+    uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
