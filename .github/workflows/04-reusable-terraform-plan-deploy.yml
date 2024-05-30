@@ -61,15 +61,22 @@ jobs:
           path: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
           retention-days: 1
 
+  plan-review:
+    runs-on: ubuntu-latest
+    needs: [plan]
+    environment: 
+      name: ${{ inputs.ENV }}
+    steps:
+      - name: Do Nothing
+        run: echo "Doing Nothing"
+
   apply:
     name: Apply ${{ inputs.ENV }} ${{ matrix.region }}
     runs-on: ubuntu-latest
-    needs: [plan]
+    needs: [plan-review]
     strategy:
       matrix:
         region: ${{ fromJson(inputs.REGIONS) }}
-    environment: 
-      name: ${{ inputs.ENV }}_${{ matrix.region }}
     steps:
       # - uses: actions/checkout@v4
       - name: Download plan for ${{ inputs.ENV }}
