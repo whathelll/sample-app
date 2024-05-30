@@ -27,6 +27,7 @@ jobs:
     with:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      REGIONS: "['au']"
     secrets: inherit
 
   deploy-uat:
@@ -36,4 +37,5 @@ jobs:
     with:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      REGIONS: "['au', 'us']"
     secrets: inherit
