@@ -7,6 +7,7 @@ on:
       REGIONS:
         description: 'Prod Regions'
         required: false
+        type: string
         default: '["au", "us", "ca"]'
       ARTEFACT_NAME:
         description: 'Artefact Name'
@@ -18,6 +19,7 @@ on:
       REGIONS:
         description: 'Prod Regions'
         required: false
+        type: string
         default: '["au", "us", "ca"]'
       ARTEFACT_NAME:
         description: 'Artefact Name'
