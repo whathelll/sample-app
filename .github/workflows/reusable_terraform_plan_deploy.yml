@@ -15,7 +15,7 @@ on:
         description: 'Regions'
         required: false
         type: string
-        default: ['au']
+        default: "['au']"
 
 jobs:
   plan:
