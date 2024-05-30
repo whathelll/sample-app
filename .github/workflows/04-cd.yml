@@ -39,7 +39,7 @@ jobs:
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: Dev
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ARTEFACT_NAME: ${{ inputs.ARTEFACT_NAME }}
       # REGIONS: '["au"]'
       REGIONS: '["au"]'
     secrets: inherit
@@ -50,7 +50,7 @@ jobs:
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: UAT
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+      ARTEFACT_NAME: ${{ inputs.ARTEFACT_NAME }}
       # REGIONS: '["au", "us"]'
       REGIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.REGIONS || '["au", "us"]' }} 
     secrets: inherit
