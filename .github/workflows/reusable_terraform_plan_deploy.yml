@@ -11,11 +11,19 @@ on:
         required: true
         type: string
         default: ''
+      REGIONS: 
+        description: 'Regions'
+        required: true
+        type: string
+        default: ['au']
 
 jobs:
   plan:
     name: Plan
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: ${{ fromJson(inputs.REGIONS) }}
     steps:
       - uses: actions/checkout@v4
       - name: python print inherited secret
@@ -30,20 +38,23 @@ jobs:
         shell: bash
         run: |  
           echo "Git Hash is $(git rev-parse --short HEAD)"
-          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ inputs.ENV }} with RunID: ${{github.run_id}}_${{ github.run_attempt }}"
+          PLAN="this is the plan for deploying $ARTEFACT_NAME to ${{ inputs.ENV }} with RunID: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}"
           echo $PLAN
-          echo $PLAN >> ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          echo $PLAN >> ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
       - name: Upload plan for ${{ inputs.ENV }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
-          path: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          name: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          path: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
           retention-days: 1
 
   apply:
     name: Apply
     runs-on: ubuntu-latest
     needs: [plan]
+    strategy:
+      matrix:
+        region: ${{ fromJson(inputs.REGIONS) }}
     environment: 
       name: ${{ inputs.ENV }}
     steps:
@@ -51,8 +62,8 @@ jobs:
       - name: Download plan for ${{ inputs.ENV }}
         uses: actions/download-artifact@v4
         with:
-          name: ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          name: ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
       - name: Deploy to ${{ inputs.ENV }}
         run: |
           echo "Deploying $ARTEFACT_NAME to $ENV"
-          cat ${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
+          cat ${{ matrix.region }}_${{github.run_id}}_${{ github.run_attempt }}_${{ inputs.ENV }}.plan
