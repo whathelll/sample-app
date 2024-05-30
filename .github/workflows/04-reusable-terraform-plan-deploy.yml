@@ -19,8 +19,15 @@ on:
         default: '["au"]'
 
 jobs:
+  restart-point:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Nothing
+        run: echo "Doing Nothing"
+        
   plan:
     name: Plan ${{ inputs.ENV }}
+    needs: [restart-point]
     runs-on: ubuntu-latest
     strategy:
       matrix:
