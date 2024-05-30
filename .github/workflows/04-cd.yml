@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       REGIONS:
-        description: 'Regions'
-        required: true
+        description: 'Prod Regions'
+        required: false
         default: '["au", "us", "ca"]'
       ARTEFACT_NAME:
         description: 'Artefact Name'
@@ -15,11 +15,14 @@ on:
 
   workflow_call:
     inputs:
-      ENV:  # environment
-        description: 'environment'
+      REGIONS:
+        description: 'Prod Regions'
+        required: false
+        default: '["au", "us", "ca"]'
+      ARTEFACT_NAME:
+        description: 'Artefact Name'
         required: true
         type: string
-        default: 'Dev'
 
 jobs:
   deploy-dev:
@@ -30,7 +33,7 @@ jobs:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
       # REGIONS: '["au"]'
-      REGIONS: ${{ github.event_name == 'workflow_dispatch' && github.inputs.REGIONS || '["au"]' }} 
+      REGIONS: '["au"]'
     secrets: inherit
 
   deploy-uat:
@@ -41,5 +44,5 @@ jobs:
       ENV: UAT
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
       # REGIONS: '["au", "us"]'
-      REGIONS: ${{ github.event_name == 'workflow_dispatch' && github.inputs.REGIONS || '["au", "us"]' }} 
+      REGIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.REGIONS || '["au", "us"]' }} 
     secrets: inherit

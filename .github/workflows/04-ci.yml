@@ -1,13 +1,8 @@
 name: 04-ci
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: 
-  # push:
+  push:
   workflow_dispatch:
-    inputs:
-      REGIONS:
-        description: 'Regions'
-        required: true
-        default: '["au", "us", "ca"]'
 
 jobs:
   build:
@@ -27,24 +22,10 @@ jobs:
       - name: check env var
         run: echo $ARTEFACT_NAME
 
-  deploy-dev:
+  cd:
     name: Deploy to Dev
     needs: [build]
-    uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
+    uses: ./.github/workflows/04-cd.yml
     with:
-      ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      # REGIONS: '["au"]'
-      REGIONS: ${{ github.event_name == 'workflow_dispatch' && github.inputs.REGIONS || '["au"]' }} 
-    secrets: inherit
-
-  deploy-uat:
-    name: Deploy to UAT
-    needs: [build, deploy-dev]
-    uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
-    with:
-      ENV: UAT
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      # REGIONS: '["au", "us"]'
-      REGIONS: ${{ github.event_name == 'workflow_dispatch' && github.inputs.REGIONS || '["au", "us"]' }} 
     secrets: inherit
