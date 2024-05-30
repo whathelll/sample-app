@@ -35,7 +35,6 @@ jobs:
 
   deploy-dev:
     name: Deploy to Dev
-    needs: [build]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: Dev
@@ -46,7 +45,7 @@ jobs:
 
   deploy-uat:
     name: Deploy to UAT
-    needs: [build, deploy-dev]
+    needs: [deploy-dev]
     uses: whathelll/sample-app/.github/workflows/03-reusable-terraform-plan-deploy.yml@main
     with:
       ENV: UAT
