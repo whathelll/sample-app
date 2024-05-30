@@ -1,6 +1,13 @@
 name: 03-ci-cd-reusable-wf
 run-name: ${{ github.workflow}} - ${{ github.sha }}
-on: [push, workflow_dispatch]
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      REGIONS:
+        description: 'Regions'
+        required: true
+        default: '["au"]'
 
 jobs:
   build:
@@ -27,7 +34,8 @@ jobs:
     with:
       ENV: Dev
       ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-      REGIONS: '["au"]'
+      # REGIONS: '["au"]'
+      REGIONS: ${{ github.event_name == "workflow_dispatch" ? github.inputs.REGIONS : null }} 
     secrets: inherit
 
   deploy-uat:
