@@ -21,6 +21,9 @@ jobs:
           echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
       - name: check env var
         run: echo $ARTEFACT_NAME
+      - name: check gh workflow
+        run: |
+          gh workflow list -R whathelll/sample-infra
 
   cd:
     name: Deploy
