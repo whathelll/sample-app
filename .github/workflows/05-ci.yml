@@ -35,6 +35,6 @@ jobs:
       - name: check gh workflow
         run: |
           gh workflow list -R whathelll/sample-infra
-          gh workflow run -R whathelll/sample-infra -f REGIONS='["au", "us"]' -f ARTEFACT_NAME='sample-app-20211019123456-12345678' 05-cd.yml
+          gh workflow run -R whathelll/sample-infra -f ARTEFACT_NAME='${{ needs.build.outputs.artefact-name }}' 05-cd.yml
         env:
           GH_TOKEN: ${{ secrets.PAT }}
