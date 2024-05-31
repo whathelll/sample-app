@@ -1,7 +1,7 @@
 name: 04-ci
 run-name: ${{ github.workflow}} - ${{ github.sha }}
 on: 
-  push:
+  # push:
   workflow_dispatch:
 
 jobs:
