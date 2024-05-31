@@ -52,6 +52,7 @@ jobs:
   start:
     name: Do Nothing
     runs-on: ubuntu-latest
+    needs: [deploy-uat]
     if: false
     steps:
       - name: Do Nothing
