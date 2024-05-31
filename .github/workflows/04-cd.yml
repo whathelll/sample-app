@@ -29,7 +29,7 @@ on:
 jobs:
   # Needs this otherwise Error: The workflow must contain at least one job with no dependencies.
   start:
-    name: Start
+    name: Do Nothing
     runs-on: ubuntu-latest
     if: false
     steps:
