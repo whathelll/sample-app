@@ -27,15 +27,6 @@ on:
         type: string
 
 jobs:
-  # Needs this otherwise Error: The workflow must contain at least one job with no dependencies.
-  start:
-    name: Do Nothing
-    runs-on: ubuntu-latest
-    if: false
-    steps:
-      - name: Do Nothing
-        run: echo "Doing Nothing"
-
   deploy-dev:
     name: Deploy Dev
     uses: whathelll/sample-app/.github/workflows/04-reusable-terraform-plan-deploy.yml@main
@@ -56,3 +47,12 @@ jobs:
       # REGIONS: '["au", "us"]'
       REGIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.REGIONS || '["au", "us"]' }} 
     secrets: inherit
+
+  # Needs this otherwise Error: The workflow must contain at least one job with no dependencies.
+  start:
+    name: Do Nothing
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - name: Do Nothing
+        run: echo "Doing Nothing"
