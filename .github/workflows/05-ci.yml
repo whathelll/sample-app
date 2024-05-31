@@ -1,0 +1,31 @@
+name: 04-ci
+run-name: ${{ github.workflow}} - ${{ github.sha }}
+on: 
+  # push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artefact-name: ${{ steps.build.outputs.ARTEFACT_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: ls
+        run: ls -la
+      - name: Build Artefact
+        id: build
+        run: |
+          ARTEFACT_NAME=sample-app-$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_ENV
+          echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
+      - name: check env var
+        run: echo $ARTEFACT_NAME
+
+  cd:
+    name: Deploy
+    needs: [build]
+    uses: whathelll/sample-infra/.github/workflows/05-cd.yml@main
+    with:
+      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    secrets: inherit
