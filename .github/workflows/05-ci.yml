@@ -24,6 +24,8 @@ jobs:
       - name: check gh workflow
         run: |
           gh workflow list -R whathelll/sample-infra
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   cd:
     name: Deploy
