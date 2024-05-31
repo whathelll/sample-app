@@ -21,16 +21,20 @@ jobs:
           echo "ARTEFACT_NAME=$ARTEFACT_NAME" >> $GITHUB_OUTPUT
       - name: check env var
         run: echo $ARTEFACT_NAME
-      - name: check gh workflow
-        run: |
-          gh workflow list -R whathelll/sample-infra
-        env:
-          GH_TOKEN: ${{ github.token }}
+
 
   cd:
     name: Deploy
     needs: [build]
-    uses: whathelll/sample-infra/.github/workflows/05-cd.yml@main
-    with:
-      ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
-    secrets: inherit
+    # uses: whathelll/sample-infra/.github/workflows/05-cd.yml@main
+    # with:
+    #   ARTEFACT_NAME: ${{ needs.build.outputs.artefact-name }}
+    # secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: check gh workflow
+        run: |
+          gh workflow list -R whathelll/sample-infra
+          gh workflow run -R whathelll/sample-infra -f REGIONS='["au", "us"]' -f ARTEFACT_NAME='sample-app-20211019123456-12345678' 05-cd.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
