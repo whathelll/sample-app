@@ -37,4 +37,4 @@ jobs:
           gh workflow list -R whathelll/sample-infra
           gh workflow run -R whathelll/sample-infra -f REGIONS='["au", "us"]' -f ARTEFACT_NAME='sample-app-20211019123456-12345678' 05-cd.yml
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.PAT }}
