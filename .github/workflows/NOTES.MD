@@ -14,5 +14,5 @@
 
 ## Regional Deployment and Environments using Matrix
 - To fully leverage environments in a matrix deployment setup, we'd need to setup an Env per Region. e.g. Prod-AU, Prod-EU, Prod-CA
-
+- Or we put a bogus step before the regional deployments and put approval on it. 
 
