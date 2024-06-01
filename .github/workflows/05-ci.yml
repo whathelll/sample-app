@@ -32,7 +32,7 @@ jobs:
     # secrets: inherit
     runs-on: ubuntu-latest
     steps:
-      - name: check gh workflow
+      - name: call deploy workflow
         run: |
           gh workflow list -R whathelll/sample-infra
           gh workflow run -R whathelll/sample-infra -f ARTEFACT_NAME='${{ needs.build.outputs.artefact-name }}' 05-cd.yml
